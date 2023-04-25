@@ -3,7 +3,6 @@ const http = require('http');
 const socketIO = require('socket.io');
 const app = express();
 
-// connected to mongoose
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/virtual-workspace', {
@@ -16,7 +15,6 @@ mongoose.connect('mongodb://localhost/virtual-workspace', {
 
 const server = http.createServer(app);
 
-// using socket to get real time connection 
 const io = socketIO(server);
 
 io.on('connection', (socket) => {
@@ -32,7 +30,6 @@ io.on('connection', (socket) => {
     });
 });
 
-// connected to port 8080
 const port = process.env.PORT || 8080;
 
 server.listen(port, () => {
