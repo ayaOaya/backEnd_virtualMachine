@@ -1,37 +1,18 @@
-const express = require('express');
-const http = require('http');
-const socketIO = require('socket.io');
+import express from "express";
+import bodyParser from "body-parser";
+import usersRoute from "./routes/users.js";
+
 const app = express();
 
-const mongoose = require('mongoose');
+const PORT = 5000;
 
-mongoose.connect('mongodb://localhost/virtual-workspace', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+app.use('/users', usersRoute)
+
+app.use(bodyParser.json());
+
+app.get("/", (req, res) => {
+    console.log("this is a text")
+    res.send("hello there")
 })
-.then(() => console.log('Connected to MongoDB'))
-.catch((error) => console.error('Error connecting to MongoDB:', error));
 
-
-const server = http.createServer(app);
-
-const io = socketIO(server);
-
-io.on('connection', (socket) => {
-    console.log('A user has connected.');
-  
-    socket.on('disconnect', () => {
-      console.log('A user has disconnected.');
-    });
-  
-    socket.on('message', (message) => {
-      console.log(`Received message: ${message}`);
-      io.emit('message', message);
-    });
-});
-
-const port = process.env.PORT || 8080;
-
-server.listen(port, () => {
-    console.log(`Server is running on port ${port}.`);
-});
+app.listen(PORT, () => console.log(`Server runnig on port : http://localhost:${PORT}`));
